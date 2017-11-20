@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class MemoryManager {
-    private int PHYSICAL_MEMORY_SIZE = 3;
+    private int PHYSICAL_MEMORY_SIZE = 3;  //should eventually be 16
 
     private BufferedReader pageReferenceReader;
     public Frame[] physicalMemory;

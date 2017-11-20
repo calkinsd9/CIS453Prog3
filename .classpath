@@ -2,5 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/calki_000/Dropbox/David/School/GVSU/5th Semester/CIS452 OS Concepts/Program3/CIS453Prog3/lib/miglayout-3.5.5-swing-java14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
