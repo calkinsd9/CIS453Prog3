@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
+
 public class MemoryManager {
     private int PHYSICAL_MEMORY_SIZE = 3;  //should eventually be 16
 
@@ -15,6 +17,11 @@ public class MemoryManager {
     public Frame[] physicalMemory;
     public Map<String, Process> processes;
     public LinkedList<Frame> referenceQueue;
+    public String currentProcessId;
+    public String currentPage;
+    public int totalPageFaults;
+    public String lastVictim;
+    
     
     public static void main(String[] args) {
         try {
@@ -36,7 +43,55 @@ public class MemoryManager {
                 new FileReader(pageReferenceFile));
     }
     
+    public Map<String, String> getPageTable(String processId, int page)
+    {
+        Process process = processes.get(processId);
+        
+        if (process == null)
+            //process has not yet been recognized
+            return null;
+        
+        if (process.pageTable.get(Integer.toString(page)) == null)
+            //page has not yet been referenced
+            return null;
+        
+        int totalPagesReferenced = process.pageTable.size();
+
+        //the desired page should appear near the middle of the page table snippet (7 procs below it, 8 above it)
+        //if that middle location is too close to the last referenced page (less than 8 away)
+        //  re-adjust it to 8 spaces away
+        int startingPosition = page;
+        if (startingPosition < totalPagesReferenced - 8)
+            startingPosition = totalPagesReferenced - 8;
+        
+        //now, if the position is less than 7 spaces away from the absolute beginning, re-adjust it to exactly 7
+        if (startingPosition < 7)
+            startingPosition = 7;
+        
+        //now subtract 7 to get the actual starting position of the page table
+        startingPosition -= 7;
+        
+        Map<String, String> pageTable = new HashMap<String,String>();
+        
+        //load a return pagetable snippet with mapped pages -> frames starting at determined position
+        for (int position = startingPosition; position < startingPosition + totalPagesReferenced; position++)
+        {
+            pageTable.put(Integer.toString(position), process.pageTable.get(Integer.toString(position)));
+        }
+        
+        return pageTable;
+    }
     
+    public int getTotalFaultsForProcess(String processId)
+    {
+        return processes.get(processId).totalFaults;
+    }
+    
+    public int getTotalReferencesForProcess(String processId)
+    {
+        return processes.get(processId).totalReferences;
+    }
+        
     public Boolean nextReference() throws IOException
     {
         String line = pageReferenceReader.readLine();
