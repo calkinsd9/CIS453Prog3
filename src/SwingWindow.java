@@ -21,10 +21,14 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.Color;
 import javax.swing.border.EtchedBorder;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
+import javax.swing.Action;
 
 public class SwingWindow {
 
-    private JFrame frame;
+    private JFrame frmVmPageReplacement;
+    private final Action action = new SwingAction();
 
     /**
      * Launch the application.
@@ -34,7 +38,7 @@ public class SwingWindow {
             public void run() {
                 try {
                     SwingWindow window = new SwingWindow();
-                    window.frame.setVisible(true);
+                    window.frmVmPageReplacement.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -53,20 +57,21 @@ public class SwingWindow {
      * Initialize the contents of the frame.
      */
     private void initialize() {
-        frame = new JFrame();
-        frame.setBounds(100, 100, 864, 720);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(null);
+        frmVmPageReplacement = new JFrame();
+        frmVmPageReplacement.setTitle("VM: Page Replacement System");
+        frmVmPageReplacement.setBounds(100, 100, 864, 720);
+        frmVmPageReplacement.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frmVmPageReplacement.getContentPane().setLayout(null);
         
         JLabel lblPhysicalMemory = new JLabel("Physical Memory");
         lblPhysicalMemory.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblPhysicalMemory.setBounds(50, 16, 151, 20);
-        frame.getContentPane().add(lblPhysicalMemory);
+        frmVmPageReplacement.getContentPane().add(lblPhysicalMemory);
         
         JPanel panelPhysicalMemory = new JPanel();
         panelPhysicalMemory.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
         panelPhysicalMemory.setBounds(25, 52, 182, 547);
-        frame.getContentPane().add(panelPhysicalMemory);
+        frmVmPageReplacement.getContentPane().add(panelPhysicalMemory);
         panelPhysicalMemory.setLayout(new MigLayout("", "[][][]", "[][][][][][][][][][][][][][][][][]"));
         
         JLabel lblFrame_0 = new JLabel("Frame 0:");
@@ -215,7 +220,7 @@ public class SwingWindow {
         
         JPanel panel_1 = new JPanel();
         panel_1.setBounds(280, 336, 480, 140);
-        frame.getContentPane().add(panel_1);
+        frmVmPageReplacement.getContentPane().add(panel_1);
         panel_1.setLayout(new MigLayout("", "[][][][][][][][][][][]", "[][][][][][][]"));
         
         JLabel lblPage = new JLabel("page /");
@@ -341,32 +346,32 @@ public class SwingWindow {
         JLabel lblPageTable = new JLabel("Page Table for");
         lblPageTable.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblPageTable.setBounds(280, 280, 120, 40);
-        frame.getContentPane().add(lblPageTable);
+        frmVmPageReplacement.getContentPane().add(lblPageTable);
         
         JLabel lblPageTableProcessId = new JLabel("P1");
         lblPageTableProcessId.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblPageTableProcessId.setBounds(400, 280, 40, 40);
-        frame.getContentPane().add(lblPageTableProcessId);
+        frmVmPageReplacement.getContentPane().add(lblPageTableProcessId);
         
         JLabel lblTotalFaults = new JLabel("Total Faults: ");
         lblTotalFaults.setBounds(619, 277, 99, 20);
-        frame.getContentPane().add(lblTotalFaults);
+        frmVmPageReplacement.getContentPane().add(lblTotalFaults);
         
         JLabel lblTotalReferences = new JLabel("Total References:");
         lblTotalReferences.setBounds(584, 300, 134, 20);
-        frame.getContentPane().add(lblTotalReferences);
+        frmVmPageReplacement.getContentPane().add(lblTotalReferences);
         
         JLabel lblTotalFaultsValue = new JLabel("0");
         lblTotalFaultsValue.setBounds(720, 277, 40, 20);
-        frame.getContentPane().add(lblTotalFaultsValue);
+        frmVmPageReplacement.getContentPane().add(lblTotalFaultsValue);
         
         JLabel lblTotalReferencesValue = new JLabel("0");
         lblTotalReferencesValue.setBounds(720, 300, 40, 20);
-        frame.getContentPane().add(lblTotalReferencesValue);
+        frmVmPageReplacement.getContentPane().add(lblTotalReferencesValue);
         
         JPanel panelStatistics = new JPanel();
         panelStatistics.setBounds(316, 133, 383, 100);
-        frame.getContentPane().add(panelStatistics);
+        frmVmPageReplacement.getContentPane().add(panelStatistics);
         panelStatistics.setLayout(new MigLayout("", "[][][][][][]", "[][][]"));
         
         JLabel lblCurrentProcess = new JLabel("Current Process:");
@@ -381,13 +386,13 @@ public class SwingWindow {
         JLabel lblTotalPageFaultsValue = new JLabel("000");
         panelStatistics.add(lblTotalPageFaultsValue, "cell 5 1");
         
-        JLabel lblPageAccessed = new JLabel("Page Accessed:");
+        JLabel lblPageAccessed = new JLabel(" Page Accessed:");
         panelStatistics.add(lblPageAccessed, "cell 0 2");
         
         JLabel lblPageAccessedValue = new JLabel("n/a");
         panelStatistics.add(lblPageAccessedValue, "cell 1 2");
         
-        JLabel lblLastVictim = new JLabel("Last Victim:");
+        JLabel lblLastVictim = new JLabel("        Last Victim:");
         panelStatistics.add(lblLastVictim, "cell 4 2");
         
         JLabel lblLastVictimValue = new JLabel("n/a");
@@ -396,26 +401,26 @@ public class SwingWindow {
         JLabel lblStatistics = new JLabel("Statistics");
         lblStatistics.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblStatistics.setBounds(471, 97, 86, 20);
-        frame.getContentPane().add(lblStatistics);
+        frmVmPageReplacement.getContentPane().add(lblStatistics);
         
         JButton btnPrevious = new JButton("Previous");
         btnPrevious.setBounds(251, 538, 115, 29);
-        frame.getContentPane().add(btnPrevious);
-        
-        JButton btnNext = new JButton("Next");
-        btnNext.setBounds(381, 538, 115, 29);
-        frame.getContentPane().add(btnNext);
+        frmVmPageReplacement.getContentPane().add(btnPrevious);
         
         JButton btnRunToFault = new JButton("Run to Fault");
         btnRunToFault.setBounds(511, 538, 134, 29);
-        frame.getContentPane().add(btnRunToFault);
+        frmVmPageReplacement.getContentPane().add(btnRunToFault);
         
         JButton btnRunAll = new JButton("Run All");
         btnRunAll.setBounds(660, 538, 115, 29);
-        frame.getContentPane().add(btnRunAll);
+        frmVmPageReplacement.getContentPane().add(btnRunAll);
+        
+        JButton btnNext = new JButton("Next");
+        btnNext.setBounds(381, 538, 115, 29);
+        frmVmPageReplacement.getContentPane().add(btnNext);
         
         JMenuBar menuBar = new JMenuBar();
-        frame.setJMenuBar(menuBar);
+        frmVmPageReplacement.setJMenuBar(menuBar);
         
         JMenu mnFile = new JMenu("File");
         menuBar.add(mnFile);
@@ -425,5 +430,13 @@ public class SwingWindow {
         
         JMenu mnOptions = new JMenu("Options");
         menuBar.add(mnOptions);
+    }
+    private class SwingAction extends AbstractAction {
+        public SwingAction() {
+            putValue(NAME, "SwingAction");
+            putValue(SHORT_DESCRIPTION, "Some short description");
+        }
+        public void actionPerformed(ActionEvent e) {
+        }
     }
 }
