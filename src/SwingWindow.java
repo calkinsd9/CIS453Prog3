@@ -54,13 +54,13 @@ public class SwingWindow {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 450, 720);
+        frame.setBounds(100, 100, 864, 720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
         
         JLabel lblFrame = new JLabel("Physical Memory");
         lblFrame.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblFrame.setBounds(64, 16, 151, 20);
+        lblFrame.setBounds(50, 16, 151, 20);
         frame.getContentPane().add(lblFrame);
         
         JPanel panel = new JPanel();
@@ -212,6 +212,191 @@ public class SwingWindow {
         
         JButton button_30 = new JButton(" ");
         panel.add(button_30, "cell 2 15");
+        
+        JPanel panel_1 = new JPanel();
+        panel_1.setBounds(280, 385, 480, 140);
+        frame.getContentPane().add(panel_1);
+        panel_1.setLayout(new MigLayout("", "[][][][][][][][][][][]", "[][][][][][][]"));
+        
+        JLabel lblPage = new JLabel("page /");
+        panel_1.add(lblPage, "cell 0 0");
+        
+        JLabel lblFrame_17 = new JLabel("frame");
+        panel_1.add(lblFrame_17, "cell 1 0");
+        
+        JLabel lblPage_1 = new JLabel("page /");
+        panel_1.add(lblPage_1, "cell 3 0");
+        
+        JLabel lblFrame_18 = new JLabel("frame");
+        panel_1.add(lblFrame_18, "cell 4 0");
+        
+        JLabel lblPage_2 = new JLabel("page /");
+        panel_1.add(lblPage_2, "cell 6 0");
+        
+        JLabel lblFrame_19 = new JLabel("frame");
+        panel_1.add(lblFrame_19, "cell 7 0");
+        
+        JLabel lblPage_3 = new JLabel("page /");
+        panel_1.add(lblPage_3, "cell 9 0");
+        
+        JLabel lblFrame_20 = new JLabel("frame");
+        panel_1.add(lblFrame_20, "cell 10 0");
+        
+        JLabel label = new JLabel("0");
+        panel_1.add(label, "cell 0 1,alignx center");
+        
+        JLabel lblNa_1 = new JLabel("n/a");
+        panel_1.add(lblNa_1, "cell 1 1,alignx center");
+        
+        JLabel label_3 = new JLabel("4");
+        panel_1.add(label_3, "cell 3 1,alignx center");
+        
+        JLabel label_18 = new JLabel("n/a");
+        panel_1.add(label_18, "cell 4 1,alignx center");
+        
+        JLabel label_8 = new JLabel("8");
+        panel_1.add(label_8, "cell 6 1,alignx center");
+        
+        JLabel label_22 = new JLabel("n/a");
+        panel_1.add(label_22, "cell 7 1,alignx center");
+        
+        JLabel label_12 = new JLabel("12");
+        panel_1.add(label_12, "cell 9 1,alignx center");
+        
+        JLabel label_26 = new JLabel("n/a");
+        panel_1.add(label_26, "cell 10 1,alignx center");
+        
+        JLabel label_2 = new JLabel("1");
+        panel_1.add(label_2, "cell 0 2,alignx center");
+        
+        JLabel lblNa_2 = new JLabel("n/a");
+        panel_1.add(lblNa_2, "cell 1 2,alignx center");
+        
+        JLabel label_5 = new JLabel("5");
+        panel_1.add(label_5, "cell 3 2,alignx center");
+        
+        JLabel label_19 = new JLabel("n/a");
+        panel_1.add(label_19, "cell 4 2,alignx center");
+        
+        JLabel label_9 = new JLabel("9");
+        panel_1.add(label_9, "cell 6 2,alignx center");
+        
+        JLabel label_23 = new JLabel("n/a");
+        panel_1.add(label_23, "cell 7 2,alignx center");
+        
+        JLabel label_13 = new JLabel("13");
+        panel_1.add(label_13, "cell 9 2,alignx center");
+        
+        JLabel label_27 = new JLabel("n/a");
+        panel_1.add(label_27, "cell 10 2,alignx center");
+        
+        JLabel label_4 = new JLabel("2");
+        panel_1.add(label_4, "cell 0 3,alignx center");
+        
+        JLabel label_16 = new JLabel("n/a");
+        panel_1.add(label_16, "cell 1 3,alignx center");
+        
+        JLabel label_6 = new JLabel("6");
+        panel_1.add(label_6, "cell 3 3,alignx center");
+        
+        JLabel label_20 = new JLabel("n/a");
+        panel_1.add(label_20, "cell 4 3,alignx center");
+        
+        JLabel label_10 = new JLabel("10");
+        panel_1.add(label_10, "cell 6 3,alignx center");
+        
+        JLabel label_24 = new JLabel("n/a");
+        panel_1.add(label_24, "cell 7 3,alignx center");
+        
+        JLabel label_14 = new JLabel("14");
+        panel_1.add(label_14, "cell 9 3,alignx center");
+        
+        JLabel label_28 = new JLabel("n/a");
+        panel_1.add(label_28, "cell 10 3,alignx center");
+        
+        JLabel label_1 = new JLabel("3");
+        panel_1.add(label_1, "cell 0 4,alignx center");
+        
+        JLabel label_17 = new JLabel("n/a");
+        panel_1.add(label_17, "cell 1 4,alignx center");
+        
+        JLabel label_7 = new JLabel("7");
+        panel_1.add(label_7, "cell 3 4,alignx center");
+        
+        JLabel label_21 = new JLabel("n/a");
+        panel_1.add(label_21, "cell 4 4,alignx center");
+        
+        JLabel label_11 = new JLabel("11");
+        panel_1.add(label_11, "cell 6 4,alignx center");
+        
+        JLabel label_25 = new JLabel("n/a");
+        panel_1.add(label_25, "cell 7 4,alignx center");
+        
+        JLabel label_15 = new JLabel("15");
+        panel_1.add(label_15, "cell 9 4,alignx center");
+        
+        JLabel label_29 = new JLabel("n/a");
+        panel_1.add(label_29, "cell 10 4,alignx center");
+        
+        JLabel lblPageTable = new JLabel("Page Table for");
+        lblPageTable.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblPageTable.setBounds(280, 329, 120, 40);
+        frame.getContentPane().add(lblPageTable);
+        
+        JLabel lblP = new JLabel("P1");
+        lblP.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblP.setBounds(400, 329, 40, 40);
+        frame.getContentPane().add(lblP);
+        
+        JLabel lblTotalFaults = new JLabel("Total Faults: ");
+        lblTotalFaults.setBounds(619, 326, 99, 20);
+        frame.getContentPane().add(lblTotalFaults);
+        
+        JLabel lblTotalReferences = new JLabel("Total References:");
+        lblTotalReferences.setBounds(584, 349, 134, 20);
+        frame.getContentPane().add(lblTotalReferences);
+        
+        JLabel label_30 = new JLabel("0");
+        label_30.setBounds(720, 326, 40, 20);
+        frame.getContentPane().add(label_30);
+        
+        JLabel label_31 = new JLabel("0");
+        label_31.setBounds(720, 349, 40, 20);
+        frame.getContentPane().add(label_31);
+        
+        JPanel panel_2 = new JPanel();
+        panel_2.setBounds(316, 133, 383, 100);
+        frame.getContentPane().add(panel_2);
+        panel_2.setLayout(new MigLayout("", "[][][][][][]", "[][][]"));
+        
+        JLabel lblCurrentProcess = new JLabel("Current Process:");
+        panel_2.add(lblCurrentProcess, "cell 0 1");
+        
+        JLabel lblNa = new JLabel("n/a");
+        panel_2.add(lblNa, "cell 1 1");
+        
+        JLabel lblTotalPageFaults = new JLabel("Total Page Faults:");
+        panel_2.add(lblTotalPageFaults, "cell 4 1");
+        
+        JLabel lblNa_4 = new JLabel("000");
+        panel_2.add(lblNa_4, "cell 5 1");
+        
+        JLabel lblPageAccessed = new JLabel("Page Accessed:");
+        panel_2.add(lblPageAccessed, "cell 0 2");
+        
+        JLabel lblNa_3 = new JLabel("n/a");
+        panel_2.add(lblNa_3, "cell 1 2");
+        
+        JLabel lblLastVictim = new JLabel("Last Victim:");
+        panel_2.add(lblLastVictim, "cell 4 2");
+        
+        JLabel lblNa_5 = new JLabel("n/a");
+        panel_2.add(lblNa_5, "cell 5 2");
+        
+        JLabel lblStatistics = new JLabel("Statistics");
+        lblStatistics.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblStatistics.setBounds(471, 97, 86, 20);
+        frame.getContentPane().add(lblStatistics);
         
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
