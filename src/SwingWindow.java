@@ -12,6 +12,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import java.awt.Font;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
@@ -24,11 +26,21 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SwingWindow {
 
     private JFrame frmVmPageReplacement;
-    private final Action action = new SwingAction();
+    private JButton[] frameProcessIds = new JButton[16];
+    private JButton[] framePages = new JButton[16];
+    private JLabel[] pageTablePages = new JLabel[16];
+    private JLabel[] pageTableFrames = new JLabel[16];
+    private MemoryManager memoryManager;
+    private JLabel lblCurrentProcessValue, lblPageAccessedValue, lblTotalPageFaultsValue, 
+        lblLastVictimValue, lblTotalReferencesValue, lblTotalFaultsValue, lblPageTableProcessId;
 
     /**
      * Launch the application.
@@ -57,6 +69,12 @@ public class SwingWindow {
      * Initialize the contents of the frame.
      */
     private void initialize() {
+        try {
+            memoryManager = new MemoryManager("Resources/input3a.data");  //TODO: change this eventually to be a menu option            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         frmVmPageReplacement = new JFrame();
         frmVmPageReplacement.setTitle("VM: Page Replacement System");
         frmVmPageReplacement.setBounds(100, 100, 864, 720);
@@ -218,6 +236,42 @@ public class SwingWindow {
         JButton btnPageFrame_15 = new JButton(" ");
         panelPhysicalMemory.add(btnPageFrame_15, "cell 2 15");
         
+        //add buttons to arrays for indexing purposes
+        frameProcessIds[0] = btnProcessIDFrame_0;
+        frameProcessIds[1] = btnProcessIDFrame_1;
+        frameProcessIds[2] = btnProcessIDFrame_2;
+        frameProcessIds[3] = btnProcessIDFrame_3;
+        frameProcessIds[4] = btnProcessIDFrame_4;
+        frameProcessIds[5] = btnProcessIDFrame_5;
+        frameProcessIds[6] = btnProcessIDFrame_6;
+        frameProcessIds[7] = btnProcessIDFrame_7;
+        frameProcessIds[8] = btnProcessIDFrame_8;
+        frameProcessIds[9] = btnProcessIDFrame_9;
+        frameProcessIds[10] = btnProcessIDFrame_10;
+        frameProcessIds[11] = btnProcessIDFrame_11;
+        frameProcessIds[12] = btnProcessIDFrame_12;
+        frameProcessIds[13] = btnProcessIDFrame_13;
+        frameProcessIds[14] = btnProcessIDFrame_14;
+        frameProcessIds[15] = btnProcessIDFrame_15;
+        
+        framePages[0] = btnPageFrame_0;
+        framePages[1] = btnPageFrame_1;
+        framePages[2] = btnPageFrame_2;
+        framePages[3] = btnPageFrame_3;
+        framePages[4] = btnPageFrame_4;
+        framePages[5] = btnPageFrame_5;
+        framePages[6] = btnPageFrame_6;
+        framePages[7] = btnPageFrame_7;
+        framePages[8] = btnPageFrame_8;
+        framePages[9] = btnPageFrame_9;
+        framePages[10] = btnPageFrame_10;
+        framePages[11] = btnPageFrame_11;
+        framePages[12] = btnPageFrame_12;
+        framePages[13] = btnPageFrame_13;
+        framePages[14] = btnPageFrame_14;
+        framePages[15] = btnPageFrame_15;
+        
+        
         JPanel panel_1 = new JPanel();
         panel_1.setBounds(280, 336, 480, 140);
         frmVmPageReplacement.getContentPane().add(panel_1);
@@ -343,12 +397,47 @@ public class SwingWindow {
         JLabel lblFrame15 = new JLabel("n/a");
         panel_1.add(lblFrame15, "cell 10 4,alignx center");
         
+        //add to array for indexing purposes
+        pageTablePages[0] = lblPage0;
+        pageTablePages[1] = lblPage1;
+        pageTablePages[2] = lblPage2;
+        pageTablePages[3] = lblPage3;
+        pageTablePages[4] = lblPage4;
+        pageTablePages[5] = lblPage5;
+        pageTablePages[6] = lblPage6;
+        pageTablePages[7] = lblPage7;
+        pageTablePages[8] = lblPage8;
+        pageTablePages[9] = lblPage9;
+        pageTablePages[10] = lblPage10;
+        pageTablePages[11] = lblPage11;
+        pageTablePages[12] = lblPage12;
+        pageTablePages[13] = lblPage13;
+        pageTablePages[14] = lblPage14;
+        pageTablePages[15] = lblPage15;
+        
+        pageTableFrames[0] = lblFrame0;
+        pageTableFrames[1] = lblFrame1;
+        pageTableFrames[2] = lblFrame2;
+        pageTableFrames[3] = lblFrame3;
+        pageTableFrames[4] = lblFrame4;
+        pageTableFrames[5] = lblFrame5;
+        pageTableFrames[6] = lblFrame6;
+        pageTableFrames[7] = lblFrame7;
+        pageTableFrames[8] = lblFrame8;
+        pageTableFrames[9] = lblFrame9;
+        pageTableFrames[10] = lblFrame10;
+        pageTableFrames[11] = lblFrame11;
+        pageTableFrames[12] = lblFrame12;
+        pageTableFrames[13] = lblFrame13;
+        pageTableFrames[14] = lblFrame14;
+        pageTableFrames[15] = lblFrame15;
+        
         JLabel lblPageTable = new JLabel("Page Table for");
         lblPageTable.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblPageTable.setBounds(280, 280, 120, 40);
         frmVmPageReplacement.getContentPane().add(lblPageTable);
         
-        JLabel lblPageTableProcessId = new JLabel("P1");
+        lblPageTableProcessId = new JLabel("P1");
         lblPageTableProcessId.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblPageTableProcessId.setBounds(400, 280, 40, 40);
         frmVmPageReplacement.getContentPane().add(lblPageTableProcessId);
@@ -361,11 +450,11 @@ public class SwingWindow {
         lblTotalReferences.setBounds(584, 300, 134, 20);
         frmVmPageReplacement.getContentPane().add(lblTotalReferences);
         
-        JLabel lblTotalFaultsValue = new JLabel("0");
+        lblTotalFaultsValue = new JLabel("0");
         lblTotalFaultsValue.setBounds(720, 277, 40, 20);
         frmVmPageReplacement.getContentPane().add(lblTotalFaultsValue);
         
-        JLabel lblTotalReferencesValue = new JLabel("0");
+        lblTotalReferencesValue = new JLabel("0");
         lblTotalReferencesValue.setBounds(720, 300, 40, 20);
         frmVmPageReplacement.getContentPane().add(lblTotalReferencesValue);
         
@@ -377,25 +466,25 @@ public class SwingWindow {
         JLabel lblCurrentProcess = new JLabel("Current Process:");
         panelStatistics.add(lblCurrentProcess, "cell 0 1");
         
-        JLabel lblCurrentProcessValue = new JLabel("n/a");
+        lblCurrentProcessValue = new JLabel("n/a");
         panelStatistics.add(lblCurrentProcessValue, "cell 1 1");
         
         JLabel lblTotalPageFaults = new JLabel("Total Page Faults:");
         panelStatistics.add(lblTotalPageFaults, "cell 4 1");
         
-        JLabel lblTotalPageFaultsValue = new JLabel("000");
+        lblTotalPageFaultsValue = new JLabel("000");
         panelStatistics.add(lblTotalPageFaultsValue, "cell 5 1");
         
         JLabel lblPageAccessed = new JLabel(" Page Accessed:");
         panelStatistics.add(lblPageAccessed, "cell 0 2");
         
-        JLabel lblPageAccessedValue = new JLabel("n/a");
+        lblPageAccessedValue = new JLabel("n/a");
         panelStatistics.add(lblPageAccessedValue, "cell 1 2");
         
         JLabel lblLastVictim = new JLabel("        Last Victim:");
         panelStatistics.add(lblLastVictim, "cell 4 2");
         
-        JLabel lblLastVictimValue = new JLabel("n/a");
+        lblLastVictimValue = new JLabel("n/a");
         panelStatistics.add(lblLastVictimValue, "cell 5 2");
         
         JLabel lblStatistics = new JLabel("Statistics");
@@ -416,6 +505,16 @@ public class SwingWindow {
         frmVmPageReplacement.getContentPane().add(btnRunAll);
         
         JButton btnNext = new JButton("Next");
+        btnNext.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    memoryManager.nextReference();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                updateDisplay();
+            }
+        });
         btnNext.setBounds(381, 538, 115, 29);
         frmVmPageReplacement.getContentPane().add(btnNext);
         
@@ -431,12 +530,66 @@ public class SwingWindow {
         JMenu mnOptions = new JMenu("Options");
         menuBar.add(mnOptions);
     }
-    private class SwingAction extends AbstractAction {
-        public SwingAction() {
-            putValue(NAME, "SwingAction");
-            putValue(SHORT_DESCRIPTION, "Some short description");
+
+    protected void updateDisplay() {
+        //update physical memory table
+        Frame[] physicalMemory = memoryManager.physicalMemory;
+
+        for (int i = 0; i < frameProcessIds.length; i++)
+        {
+            if (physicalMemory[i] != null)
+            {
+                frameProcessIds[i].setText(physicalMemory[i].processID);
+                framePages[i].setText(physicalMemory[i].pageNumber);
+            }
+            else 
+            {
+                frameProcessIds[i].setText("n/a");
+                framePages[i].setText("n/a");
+            }
         }
-        public void actionPerformed(ActionEvent e) {
+        
+        //update statistics
+        lblCurrentProcessValue.setText(memoryManager.currentProcessId);
+        lblPageAccessedValue.setText(memoryManager.currentPage);
+        lblTotalPageFaultsValue.setText(Integer.toString(memoryManager.totalPageFaults));
+        lblLastVictimValue.setText(memoryManager.lastVictim);
+        
+        //update page table
+        lblPageTableProcessId.setText(memoryManager.currentProcessId);
+        Map<String,String> processPageTable = memoryManager.getPageTable(memoryManager.currentProcessId, Integer.parseInt(memoryManager.currentPage));
+        //processPageTable now has a HashMap of (String) pages -> (String) frames
+        //  but I don't know where they start, since it's a snippet
+        //    so run through all values from 0-63
+        //      if it doesn't return null, then that's the value to start on
+        
+        int j = 0;
+        //the while loop advances the page reference to the first that was written in the snippet
+        while(processPageTable.get(Integer.toString(j)) == null)
+        {
+            j++;
         }
+        for (int i = 0; i < pageTableFrames.length; i++)
+        {
+            //check to make sure that there is a page to write
+            if (processPageTable.get(Integer.toString(j)) == null)
+            {
+                pageTablePages[i].setText("n/a");
+                pageTableFrames[i].setText("n/a");                
+            }
+            else
+            {
+                pageTablePages[i].setText(Integer.toString(j));
+                pageTableFrames[i].setText(processPageTable.get(Integer.toString(j)));
+            }
+
+            j++;
+        }
+        
+        //update process statistics
+        lblTotalFaultsValue.setText(Integer.toString(memoryManager.getTotalFaultsForProcess(memoryManager.currentProcessId)));
+        lblTotalReferencesValue.setText(Integer.toString(memoryManager.getTotalReferencesForProcess(memoryManager.currentProcessId)));
+        
     }
+
 }

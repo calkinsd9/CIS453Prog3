@@ -11,7 +11,7 @@ import java.util.Map;
 import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 
 public class MemoryManager {
-    private int PHYSICAL_MEMORY_SIZE = 3;  //should eventually be 16
+    private int PHYSICAL_MEMORY_SIZE = 16;  //should eventually be 16
 
     private BufferedReader pageReferenceReader;
     public Frame[] physicalMemory;
@@ -61,7 +61,7 @@ public class MemoryManager {
         //if that middle location is too close to the last referenced page (less than 8 away)
         //  re-adjust it to 8 spaces away
         int startingPosition = page;
-        if (startingPosition < totalPagesReferenced - 8)
+        if (startingPosition > totalPagesReferenced - 8)
             startingPosition = totalPagesReferenced - 8;
         
         //now, if the position is less than 7 spaces away from the absolute beginning, re-adjust it to exactly 7
@@ -100,9 +100,10 @@ public class MemoryManager {
         
         /* get the process and the page it wants */
         String processID = line.split(":")[0];
-        //debug
-        String[] teString = line.split("\t");
         String page = Integer.toString(Integer.parseInt(line.split("\t")[1], 2));
+        
+        currentProcessId = processID;
+        currentPage = page;
         
         /* see if we've ever encountered that process. if not, create it */
         if (!processes.containsKey(processID))
@@ -121,7 +122,7 @@ public class MemoryManager {
         {
             if (frame == null)
                 continue;
-            if (frame.processID == processID && frame.pageNumber == page)
+            if (frame.processID.equals(processID) && frame.pageNumber.equals(page))
             {
                 pageInMemory = true;
                 victim = frame;
@@ -137,6 +138,8 @@ public class MemoryManager {
         }
         else  //page is not in memory; page fault
         {
+            processes.get(processID).totalFaults++;
+            totalPageFaults++;
             //if there is an empty spot in memory, use it
             int frameIndex;
             for (frameIndex = 0; frameIndex < physicalMemory.length; frameIndex++)
@@ -151,6 +154,8 @@ public class MemoryManager {
             {
                 //victim should be the first element of the list (which is the last one referenced)
                 victim = referenceQueue.pollFirst();
+                lastVictim = victim.processID;
+                
                 
                 //get the index of the victim in physical memory
                 for (frameIndex = 0; frameIndex < physicalMemory.length; frameIndex++)

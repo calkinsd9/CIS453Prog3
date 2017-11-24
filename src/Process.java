@@ -36,7 +36,7 @@ public class Process {
         this.totalReferences++;
         String frame = this.pageTable.get(pageNum);
         if (frame == null)
-            this.pageTable.put(pageNum, "not in memory");
+            this.pageTable.put(pageNum, "n/a");
     }
     
     public void movedPageIntoMemory(String page, String frame)
@@ -46,7 +46,7 @@ public class Process {
     
     public void movedPageOutOfMemory(String page) 
     {
-        this.pageTable.put(page, "not in memory");
+        this.pageTable.put(page, "n/a");
     }
 
 }
