@@ -271,7 +271,32 @@ public class SwingWindow {
         framePages[14] = btnPageFrame_14;
         framePages[15] = btnPageFrame_15;
         
-        
+        //create listeners for all Physical Memory processID buttons
+        for (int i = 0 ; i < frameProcessIds.length; i++)
+        {
+            frameProcessIds[i].addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    //get the process name from the button
+                    JButton pressed = (JButton) e.getSource();
+                    String processId = pressed.getText();
+                    
+                    //get the button's position in the array
+                    int index;
+                    for (index = 0; index < frameProcessIds.length; index++)
+                    {
+                        if (frameProcessIds[index].getText().equals(processId))
+                            break;
+                    }
+                    
+                    //use the button's position to get the corresponding page number in its array
+                    String pageNumber = framePages[index].getText();
+                    
+                    //call updatePageTable()
+                    updatePageTable(processId, pageNumber);
+                }
+            });
+        }
+                
         JPanel panel_1 = new JPanel();
         panel_1.setBounds(280, 336, 480, 140);
         frmVmPageReplacement.getContentPane().add(panel_1);
@@ -557,7 +582,47 @@ public class SwingWindow {
         
         //update page table
         lblPageTableProcessId.setText(memoryManager.currentProcessId);
-        Map<String,String> processPageTable = memoryManager.getPageTable(memoryManager.currentProcessId, Integer.parseInt(memoryManager.currentPage));
+        
+        updatePageTable(memoryManager.currentProcessId, memoryManager.currentPage);
+//        Map<String,String> processPageTable = memoryManager.getPageTable(memoryManager.currentProcessId, Integer.parseInt(memoryManager.currentPage));
+//        //processPageTable now has a HashMap of (String) pages -> (String) frames
+//        //  but I don't know where they start, since it's a snippet
+//        //    so run through all values from 0-63
+//        //      if it doesn't return null, then that's the value to start on
+//        
+//        int j = 0;
+//        //the while loop advances the page reference to the first that was written in the snippet
+//        while(processPageTable.get(Integer.toString(j)) == null)
+//        {
+//            j++;
+//        }
+//        for (int i = 0; i < pageTableFrames.length; i++)
+//        {
+//            //check to make sure that there is a page to write
+//            if (processPageTable.get(Integer.toString(j)) == null)
+//            {
+//                pageTablePages[i].setText("n/a");
+//                pageTableFrames[i].setText("n/a");                
+//            }
+//            else
+//            {
+//                pageTablePages[i].setText(Integer.toString(j));
+//                pageTableFrames[i].setText(processPageTable.get(Integer.toString(j)));
+//            }
+//
+//            j++;
+//        }
+        
+        //update process statistics
+        lblTotalFaultsValue.setText(Integer.toString(memoryManager.getTotalFaultsForProcess(memoryManager.currentProcessId)));
+        lblTotalReferencesValue.setText(Integer.toString(memoryManager.getTotalReferencesForProcess(memoryManager.currentProcessId)));
+        
+    }
+    
+    private void updatePageTable(String processId, String page)
+    {
+        lblPageTableProcessId.setText(processId);
+        Map<String,String> processPageTable = memoryManager.getPageTable(processId, Integer.parseInt(page));
         //processPageTable now has a HashMap of (String) pages -> (String) frames
         //  but I don't know where they start, since it's a snippet
         //    so run through all values from 0-63
@@ -585,11 +650,6 @@ public class SwingWindow {
 
             j++;
         }
-        
-        //update process statistics
-        lblTotalFaultsValue.setText(Integer.toString(memoryManager.getTotalFaultsForProcess(memoryManager.currentProcessId)));
-        lblTotalReferencesValue.setText(Integer.toString(memoryManager.getTotalReferencesForProcess(memoryManager.currentProcessId)));
-        
     }
-
+    
 }
