@@ -10,9 +10,18 @@ import java.util.Map;
 
 import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 
+/*****
+ * The heart of the program, the memory manager holds the business
+ *   logic of how the virtual memory manager works and all 
+ *   interaction points between that logic and the GUI
+ *   
+ * @author calki_000
+ *
+ */
 public class MemoryManager {
-    private int PHYSICAL_MEMORY_SIZE = 16;  //should eventually be 16
+    private int PHYSICAL_MEMORY_SIZE = 16;  //default value as per program specs is 16
 
+    /* instance variables */
     private BufferedReader pageReferenceReader;
     public Frame[] physicalMemory;
     public Map<String, Process> processes;
@@ -24,7 +33,12 @@ public class MemoryManager {
     public boolean faultHappened;
     public String pageReferenceFile;
     
-    
+    /*****
+     * Main method for testing. Opens the instructions at 
+     *   "Resources/input3a.data" and runs them all the way through
+     *   
+     * @param args
+     */
     public static void main(String[] args) {
         try {
             MemoryManager mm = new MemoryManager("Resources/input3a.data");
@@ -35,6 +49,12 @@ public class MemoryManager {
 
     }
     
+    /*****
+     * Constructor - parameterized
+     * 
+     * @param pageReferenceFile file from which to load instructions
+     * @throws FileNotFoundException if filename does not point to valid file
+     */
     public MemoryManager(String pageReferenceFile) throws FileNotFoundException
     {
         super();
@@ -45,7 +65,16 @@ public class MemoryManager {
         this.pageReferenceReader = new BufferedReader(
                 new FileReader(pageReferenceFile));
     }
-    
+
+    /*****
+     * Used by the GUI. Returns a HashMap of String -> String
+     *   representing a mapping of pages -> frames for a 16-frame 
+     *   snippet of the given process's page table
+     *   
+     * @param processId the name of the process
+     * @param page the number of the page to build the snippet in reference to
+     * @return Map<String, String> representing pages -> frames
+     */
     public Map<String, String> getPageTable(String processId, int page)
     {
         Process process = processes.get(processId);
@@ -85,16 +114,34 @@ public class MemoryManager {
         return pageTable;
     }
     
+    /*****
+     * 
+     * @param processId
+     * @return total page faults for the process identified by the parameter
+     */
     public int getTotalFaultsForProcess(String processId)
     {
         return processes.get(processId).totalFaults;
     }
-    
+
+    /*****
+     * 
+     * @param processId
+     * @return total references for the process identified by the parameter
+     */
     public int getTotalReferencesForProcess(String processId)
     {
         return processes.get(processId).totalReferences;
     }
         
+    /*****
+     * Reads a line from the reference list (set at MemoryManager initialization)
+     *   and runs that operation.
+     * Returns false when there are no lines left in the reference file
+     * 
+     * @return
+     * @throws IOException
+     */
     public Boolean nextReference() throws IOException
     {
         String line = pageReferenceReader.readLine();
@@ -187,6 +234,13 @@ public class MemoryManager {
         return true;
     }
     
+    /*****
+     * Returns the Memory Manager to a newly-initialized state
+     * Note that it will retain the page referece file last assigned to it;
+     *   if the page reference file was changed during operation (by the GUI, e.g.)
+     *   then that reference file will remain attached and will not reset
+     *   (though nextReference() will begin reading from the top of the file)
+     */
     public void reset()
     {
         this.processes = new HashMap<String, Process>();
@@ -204,6 +258,4 @@ public class MemoryManager {
             e.printStackTrace();
         }
     }
-
-
 }

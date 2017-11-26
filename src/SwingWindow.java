@@ -633,36 +633,7 @@ public class SwingWindow {
         
         //update page table
         lblPageTableProcessId.setText(memoryManager.currentProcessId);
-        
         updatePageTable(memoryManager.currentProcessId, memoryManager.currentPage);
-//        Map<String,String> processPageTable = memoryManager.getPageTable(memoryManager.currentProcessId, Integer.parseInt(memoryManager.currentPage));
-//        //processPageTable now has a HashMap of (String) pages -> (String) frames
-//        //  but I don't know where they start, since it's a snippet
-//        //    so run through all values from 0-63
-//        //      if it doesn't return null, then that's the value to start on
-//        
-//        int j = 0;
-//        //the while loop advances the page reference to the first that was written in the snippet
-//        while(processPageTable.get(Integer.toString(j)) == null)
-//        {
-//            j++;
-//        }
-//        for (int i = 0; i < pageTableFrames.length; i++)
-//        {
-//            //check to make sure that there is a page to write
-//            if (processPageTable.get(Integer.toString(j)) == null)
-//            {
-//                pageTablePages[i].setText("n/a");
-//                pageTableFrames[i].setText("n/a");                
-//            }
-//            else
-//            {
-//                pageTablePages[i].setText(Integer.toString(j));
-//                pageTableFrames[i].setText(processPageTable.get(Integer.toString(j)));
-//            }
-//
-//            j++;
-//        }
         
         //update process statistics
         lblTotalFaultsValue.setText(Integer.toString(memoryManager.getTotalFaultsForProcess(memoryManager.currentProcessId)));
@@ -703,6 +674,10 @@ public class SwingWindow {
         }
     }
     
+    /*****
+     * Sets the value for all labels in the display to "n/a" or "0" state
+     * This function does not reset the memory manager
+     */
     private void resetDisplay() {
         for (int i = 0; i < frameProcessIds.length; i++)
         {
