@@ -523,21 +523,8 @@ public class SwingWindow {
         btnReset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 memoryManager.reset();
-                for (int i = 0; i < frameProcessIds.length; i++)
-                {
-                    frameProcessIds[i].setText("n/a");
-                    framePages[i].setText("n/a");
-                    pageTableFrames[i].setText("n/a");
-                    pageTablePages[i].setText("n/a");
-                }
                 
-                lblPageTableProcessId.setText("");
-                lblCurrentProcessValue.setText("n/a");
-                lblPageAccessedValue.setText("n/a");
-                lblTotalPageFaultsValue.setText("0");
-                lblLastVictimValue.setText("n/a");
-                lblTotalFaultsValue.setText("0");
-                lblTotalReferencesValue.setText("0");
+                resetDisplay();
             }
         });
         btnReset.setBounds(311, 492, 115, 29);
@@ -593,7 +580,24 @@ public class SwingWindow {
         JMenu mnFile = new JMenu("File");
         menuBar.add(mnFile);
         
+        fChooser = new JFileChooser();
+        
         JMenuItem mntmOpen = new JMenuItem("Open");
+        mntmOpen.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int returnValue = fChooser.showOpenDialog(menuBar);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    //load new file into memory manager
+                    try {
+                        memoryManager.pageReferenceFile = fChooser.getSelectedFile().getCanonicalPath();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    memoryManager.reset();
+                    resetDisplay();
+                }
+            }
+        });
         mnFile.add(mntmOpen);
         
         JMenuItem mntmQuit = new JMenuItem("Quit");
@@ -697,5 +701,23 @@ public class SwingWindow {
 
             j++;
         }
+    }
+    
+    private void resetDisplay() {
+        for (int i = 0; i < frameProcessIds.length; i++)
+        {
+            frameProcessIds[i].setText("n/a");
+            framePages[i].setText("n/a");
+            pageTableFrames[i].setText("n/a");
+            pageTablePages[i].setText("n/a");
+        }
+        
+        lblPageTableProcessId.setText("");
+        lblCurrentProcessValue.setText("n/a");
+        lblPageAccessedValue.setText("n/a");
+        lblTotalPageFaultsValue.setText("0");
+        lblLastVictimValue.setText("n/a");
+        lblTotalFaultsValue.setText("0");
+        lblTotalReferencesValue.setText("0");
     }
 }

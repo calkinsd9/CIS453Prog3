@@ -22,6 +22,7 @@ public class MemoryManager {
     public int totalPageFaults;
     public String lastVictim;
     public boolean faultHappened;
+    public String pageReferenceFile;
     
     
     public static void main(String[] args) {
@@ -40,6 +41,7 @@ public class MemoryManager {
         this.processes = new HashMap<String, Process>();
         this.physicalMemory = new Frame[PHYSICAL_MEMORY_SIZE];
         this.referenceQueue = new LinkedList<Frame>();
+        this.pageReferenceFile = pageReferenceFile;
         this.pageReferenceReader = new BufferedReader(
                 new FileReader(pageReferenceFile));
     }
@@ -197,7 +199,7 @@ public class MemoryManager {
         this.faultHappened = false;
         try {
             this.pageReferenceReader = new BufferedReader(
-                    new FileReader("Resources/input3a.data"));
+                    new FileReader(pageReferenceFile));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
