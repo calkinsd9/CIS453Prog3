@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -41,6 +42,7 @@ public class SwingWindow {
     private MemoryManager memoryManager;
     private JLabel lblCurrentProcessValue, lblPageAccessedValue, lblTotalPageFaultsValue, 
         lblLastVictimValue, lblTotalReferencesValue, lblTotalFaultsValue, lblPageTableProcessId;
+    private JFileChooser fChooser;
 
     /**
      * Launch the application.
@@ -77,7 +79,7 @@ public class SwingWindow {
         }
         frmVmPageReplacement = new JFrame();
         frmVmPageReplacement.setTitle("VM: Page Replacement System");
-        frmVmPageReplacement.setBounds(100, 100, 864, 720);
+        frmVmPageReplacement.setBounds(100, 100, 791, 720);
         frmVmPageReplacement.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmVmPageReplacement.getContentPane().setLayout(null);
         
@@ -468,23 +470,23 @@ public class SwingWindow {
         frmVmPageReplacement.getContentPane().add(lblPageTableProcessId);
         
         JLabel lblTotalFaults = new JLabel("Total Faults: ");
-        lblTotalFaults.setBounds(619, 277, 99, 20);
+        lblTotalFaults.setBounds(490, 277, 99, 20);
         frmVmPageReplacement.getContentPane().add(lblTotalFaults);
         
         JLabel lblTotalReferences = new JLabel("Total References:");
-        lblTotalReferences.setBounds(584, 300, 134, 20);
+        lblTotalReferences.setBounds(455, 300, 134, 20);
         frmVmPageReplacement.getContentPane().add(lblTotalReferences);
         
         lblTotalFaultsValue = new JLabel("0");
-        lblTotalFaultsValue.setBounds(720, 277, 40, 20);
+        lblTotalFaultsValue.setBounds(591, 277, 40, 20);
         frmVmPageReplacement.getContentPane().add(lblTotalFaultsValue);
         
         lblTotalReferencesValue = new JLabel("0");
-        lblTotalReferencesValue.setBounds(720, 300, 40, 20);
+        lblTotalReferencesValue.setBounds(591, 300, 40, 20);
         frmVmPageReplacement.getContentPane().add(lblTotalReferencesValue);
         
         JPanel panelStatistics = new JPanel();
-        panelStatistics.setBounds(316, 133, 383, 100);
+        panelStatistics.setBounds(299, 123, 383, 100);
         frmVmPageReplacement.getContentPane().add(panelStatistics);
         panelStatistics.setLayout(new MigLayout("", "[][][][][][]", "[][][]"));
         
@@ -514,20 +516,62 @@ public class SwingWindow {
         
         JLabel lblStatistics = new JLabel("Statistics");
         lblStatistics.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblStatistics.setBounds(471, 97, 86, 20);
+        lblStatistics.setBounds(391, 87, 86, 20);
         frmVmPageReplacement.getContentPane().add(lblStatistics);
         
-        JButton btnPrevious = new JButton("Previous");
-        btnPrevious.setBounds(251, 538, 115, 29);
-        frmVmPageReplacement.getContentPane().add(btnPrevious);
+        JButton btnReset = new JButton("Reset");
+        btnReset.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                memoryManager.reset();
+                for (int i = 0; i < frameProcessIds.length; i++)
+                {
+                    frameProcessIds[i].setText("n/a");
+                    framePages[i].setText("n/a");
+                    pageTableFrames[i].setText("n/a");
+                    pageTablePages[i].setText("n/a");
+                }
+                
+                lblPageTableProcessId.setText("");
+                lblCurrentProcessValue.setText("n/a");
+                lblPageAccessedValue.setText("n/a");
+                lblTotalPageFaultsValue.setText("0");
+                lblLastVictimValue.setText("n/a");
+                lblTotalFaultsValue.setText("0");
+                lblTotalReferencesValue.setText("0");
+            }
+        });
+        btnReset.setBounds(311, 492, 115, 29);
+        frmVmPageReplacement.getContentPane().add(btnReset);
         
         JButton btnRunToFault = new JButton("Run to Fault");
-        btnRunToFault.setBounds(511, 538, 134, 29);
+        btnRunToFault.setBounds(300, 538, 134, 29);
         frmVmPageReplacement.getContentPane().add(btnRunToFault);
+        btnRunToFault.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    do {
+                        memoryManager.nextReference();
+                    } while (!memoryManager.faultHappened);
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+                updateDisplay();                
+            }
+        });
         
         JButton btnRunAll = new JButton("Run All");
-        btnRunAll.setBounds(660, 538, 115, 29);
+        btnRunAll.setBounds(449, 538, 115, 29);
         frmVmPageReplacement.getContentPane().add(btnRunAll);
+        btnRunAll.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    while(memoryManager.nextReference());
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+                updateDisplay();                
+            }
+        });
         
         JButton btnNext = new JButton("Next");
         btnNext.addActionListener(new ActionListener() {
@@ -540,7 +584,7 @@ public class SwingWindow {
                 updateDisplay();
             }
         });
-        btnNext.setBounds(381, 538, 115, 29);
+        btnNext.setBounds(449, 492, 115, 29);
         frmVmPageReplacement.getContentPane().add(btnNext);
         
         JMenuBar menuBar = new JMenuBar();
@@ -548,6 +592,9 @@ public class SwingWindow {
         
         JMenu mnFile = new JMenu("File");
         menuBar.add(mnFile);
+        
+        JMenuItem mntmOpen = new JMenuItem("Open");
+        mnFile.add(mntmOpen);
         
         JMenuItem mntmQuit = new JMenuItem("Quit");
         mnFile.add(mntmQuit);
@@ -651,5 +698,4 @@ public class SwingWindow {
             j++;
         }
     }
-    
 }

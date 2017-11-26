@@ -21,6 +21,7 @@ public class MemoryManager {
     public String currentPage;
     public int totalPageFaults;
     public String lastVictim;
+    public boolean faultHappened;
     
     
     public static void main(String[] args) {
@@ -135,6 +136,7 @@ public class MemoryManager {
             //pull the last reference from wherever it is in the queue and put it at the end
             referenceQueue.remove(victim);
             referenceQueue.add(new Frame(processID, page));
+            faultHappened = false;
         }
         else  //page is not in memory; page fault
         {
@@ -178,8 +180,27 @@ public class MemoryManager {
             //notify process the page has been moved in (to change its page table)
             processes.get(processID).movedPageIntoMemory(page, Integer.toString(frameIndex));
             
+            faultHappened = true;
         }
         return true;
+    }
+    
+    public void reset()
+    {
+        this.processes = new HashMap<String, Process>();
+        this.physicalMemory = new Frame[PHYSICAL_MEMORY_SIZE];
+        this.referenceQueue = new LinkedList<Frame>();
+        this.currentProcessId = "n/a";
+        this.currentPage = "n/a";
+        this.totalPageFaults = 0;
+        this.lastVictim = "n/a";
+        this.faultHappened = false;
+        try {
+            this.pageReferenceReader = new BufferedReader(
+                    new FileReader("Resources/input3a.data"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
