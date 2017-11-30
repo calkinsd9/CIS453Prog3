@@ -22,15 +22,19 @@ import java.awt.Label;
 import java.awt.Button;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
+
 import java.awt.Color;
 import javax.swing.border.EtchedBorder;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
+import javax.swing.ButtonGroup;
+
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JRadioButtonMenuItem;
 
 public class SwingWindow {
 
@@ -609,6 +613,26 @@ public class SwingWindow {
         
         JMenu mnOptions = new JMenu("Options");
         menuBar.add(mnOptions);
+        
+        JRadioButtonMenuItem rdbtnmntmLru = new JRadioButtonMenuItem("LRU");
+        rdbtnmntmLru.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                memoryManager.currentAlg = Algorithm.alg.LRU;
+            }
+        });
+        mnOptions.add(rdbtnmntmLru);
+        
+        JRadioButtonMenuItem rdbtnmntmOptimal = new JRadioButtonMenuItem("Optimal");
+        rdbtnmntmOptimal.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                memoryManager.currentAlg = Algorithm.alg.OPTIMAL;
+            }
+        });
+        mnOptions.add(rdbtnmntmOptimal);
+        
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(rdbtnmntmLru);
+        bg.add(rdbtnmntmOptimal);
     }
 
     protected void updateDisplay() {

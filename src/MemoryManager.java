@@ -32,6 +32,7 @@ public class MemoryManager {
     public String lastVictim;
     public boolean faultHappened;
     public String pageReferenceFile;
+    public Algorithm.alg currentAlg;
     
     /*****
      * Main method for testing. Opens the instructions at 
@@ -62,6 +63,7 @@ public class MemoryManager {
         this.physicalMemory = new Frame[PHYSICAL_MEMORY_SIZE];
         this.referenceQueue = new LinkedList<Frame>();
         this.pageReferenceFile = pageReferenceFile;
+        this.currentAlg = Algorithm.alg.LRU;
         this.pageReferenceReader = new BufferedReader(
                 new FileReader(pageReferenceFile));
     }
@@ -203,9 +205,69 @@ public class MemoryManager {
             // need to choose victim
             if (frameIndex == physicalMemory.length)
             {
-                //victim should be the first element of the list (which is the last one referenced)
-                victim = referenceQueue.pollFirst();
-                lastVictim = victim.processID;
+                if (currentAlg == Algorithm.alg.LRU){
+                    //victim should be the first element of the list (which is the last one referenced)
+                    victim = referenceQueue.pollFirst();
+                    lastVictim = victim.processID;
+                }
+                
+                if (currentAlg == Algorithm.alg.OPTIMAL)
+                {
+                    int totalReferences = 0;
+                    //get the total number of references
+                    for (Process process : processes.values()) {
+                        totalReferences += process.totalReferences;
+                    }
+                    
+                    //create a mapping of frames to ints (which will be next reference values)
+                    Map<Frame, Integer> nextReferenceForFrame = new HashMap<Frame, Integer>();
+                    
+                    //iterate through every process in memory and scan the file for when they're going to be next
+                    for (Frame frame : physicalMemory) {
+                        //get a frame
+                        String processId = frame.processID;
+                        String pageNumber = frame.pageNumber;
+                        
+                        //create a new file reader for the page reference file
+                        BufferedReader tempReader = new BufferedReader(
+                                new FileReader(pageReferenceFile));
+                        
+                        String currentLine = null;
+                        //read lines till reach current position
+                        for (int i = 0; i < totalReferences; i++)
+                        {
+                            currentLine = tempReader.readLine();
+                        }
+                        
+                        int timeToNextRef = 0;
+                        // read lines until we get a reference for this process and page
+                        while (currentLine != null)
+                        {
+                            timeToNextRef++;
+                            String nextProcessId = currentLine.split(":")[0];
+                            String nextPage = Integer.toString(Integer.parseInt(currentLine.split("\t")[1], 2));
+                            if (processId.equals(nextProcessId) && pageNumber.equals(nextPage))
+                                break;
+                            currentLine = tempReader.readLine();
+                        }
+                        
+                        //put frame and time to next reference into the mapping
+                        nextReferenceForFrame.put(frame, timeToNextRef);
+                    }
+                    
+                    //iterate through the map and find the max number
+                    int maxNumberOfReferences = 0;
+                    
+                    for (Frame frame : nextReferenceForFrame.keySet()) {
+                        if (nextReferenceForFrame.get(frame) >= maxNumberOfReferences)
+                        {
+                            maxNumberOfReferences = nextReferenceForFrame.get(frame);
+                            victim = frame;
+                        }
+                    }
+                    
+                    lastVictim = victim.processID;
+                }
                 
                 
                 //get the index of the victim in physical memory
