@@ -3,36 +3,20 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import java.awt.Label;
-import java.awt.Button;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.MatteBorder;
-
-import java.awt.Color;
 import javax.swing.border.EtchedBorder;
-import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
-import javax.swing.Action;
 import javax.swing.ButtonGroup;
 
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JRadioButtonMenuItem;
 
@@ -76,7 +60,7 @@ public class SwingWindow {
      */
     private void initialize() {
         try {
-            memoryManager = new MemoryManager("Resources/input3a.data");  //TODO: change this eventually to be a menu option            
+            memoryManager = new MemoryManager("Resources/input3a.data");            
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return;
@@ -545,7 +529,8 @@ public class SwingWindow {
             public void actionPerformed(ActionEvent e) {
                 try {
                     do {
-                        memoryManager.nextReference();
+                        if (memoryManager.nextReference() == false)
+                            break;
                     } while (!memoryManager.faultHappened);
                 } catch (Exception e2) {
                     e2.printStackTrace();

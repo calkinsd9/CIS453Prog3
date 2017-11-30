@@ -1,21 +1,18 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 
 /*****
  * The heart of the program, the memory manager holds the business
  *   logic of how the virtual memory manager works and all 
  *   interaction points between that logic and the GUI
  *   
- * @author calki_000
+ * @author David Calkins
  *
  */
 public class MemoryManager {
