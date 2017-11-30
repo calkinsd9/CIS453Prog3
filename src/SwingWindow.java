@@ -295,6 +295,10 @@ public class SwingWindow {
                     
                     //call updatePageTable()
                     updatePageTable(processId, pageNumber);
+                    
+                    //update process statistics
+                    lblTotalFaultsValue.setText(Integer.toString(memoryManager.getTotalFaultsForProcess(processId)));
+                    lblTotalReferencesValue.setText(Integer.toString(memoryManager.getTotalReferencesForProcess(processId)));
                 }
             });
         }
